@@ -56,7 +56,7 @@ public class AutoBuilderWindow : EditorWindow
         toolBarRect = new Rect(0, 0, position.width, 18);
         propertyRect = new Rect(5, 25, position.width-10, 300);
         buildpropertyRect = new BuildPropertyRect();
-        
+        buildpropertyRect.Init();
         //editorScript = new EditorScript();
         //editorRect= new Rect(0, 18, position.width, 100);
         //ReorderableList reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("events"), true, true, true, true);

@@ -9,13 +9,13 @@ using UnityEngine.Events;
 public class BuildInfoClass
 {
     // APK 기본 정보
-    public string AppName;// = Application.productName;
-    public string BuildPath;// = Application.dataPath;
-    public string AppVersion;// = Application.version;
+    public string AppName;
+    public string BuildPath;
+    public string AppVersion;
     public int VersionCode;
     public BuildType TargetType;
     public BuildTarget TargetPlatform;
-    
+
     //BuildEvent
     public BuildEventClass BuildEvent;
 
@@ -27,12 +27,27 @@ public class BuildInfoClass
     // manifest
     public bool UseSchema;
     public string SchemaName;
+
+    public BuildInfoClass()
+    {
+        AppName = Application.productName;
+        BuildPath = Application.dataPath;
+        AppVersion = Application.version;
+        TargetType = BuildType.Product;
+        TargetPlatform = BuildTarget.Android;
+        BuildEvent = new BuildEventClass();
+        UseKeyStore = false;
+        KeyStorePath = "";
+        KeyStorePassWord = "";
+        UseSchema = false;
+        SchemaName = "";
+    }
 }
 
 [SerializeField]
 public enum BuildType
 {
-    None =0,
+    None = 0,
     Product = 1,
     Stage = 2,
 }
