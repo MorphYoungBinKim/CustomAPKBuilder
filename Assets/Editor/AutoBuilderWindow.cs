@@ -20,16 +20,26 @@ public class AutoBuilderWindow : EditorWindow
             return instance;
         }
     }
-    public Rect toolBarRect;
+
+    private static BuildInfoClass buildinfo;
+    public static BuildInfoClass Buildinfo
+    {
+        get
+        {
+            if (buildinfo == null)
+            {
+                buildinfo = new BuildInfoClass();
+            }
+            return buildinfo;
+        }
+    }
 
     private BuildToolBar toolBar;
-
+    private BuildPropertyRect buildpropertyRect;
     private Vector2 windowSize = new Vector2(500, 500);
+    private Rect toolBarRect;
+    private Rect propertyRect;
 
-    private EditorScript editorScript;
-    private Rect editorRect;
-
-    public UnityEvent event2;
     //private IList serializedObject;
     //SerializedObject serializedObject = new SerializedObject();
     private void OnEnable()
@@ -44,6 +54,9 @@ public class AutoBuilderWindow : EditorWindow
         position = new Rect(80, 150, minSize.x, minSize.y);
         toolBar = new BuildToolBar();
         toolBarRect = new Rect(0, 0, position.width, 18);
+        propertyRect = new Rect(5, 25, position.width-10, 300);
+        buildpropertyRect = new BuildPropertyRect();
+        
         //editorScript = new EditorScript();
         //editorRect= new Rect(0, 18, position.width, 100);
         //ReorderableList reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("events"), true, true, true, true);
@@ -55,6 +68,11 @@ public class AutoBuilderWindow : EditorWindow
         //var guiStyle = new GUIStyle(EditorStyles.helpBox);
         //GUI.Box(new Rect(0, 0, maxSize.x, maxSize.y), "", guiStyle);
         toolBar.OnGUI(toolBarRect);
+        buildpropertyRect.OnGUI(propertyRect);
+        if (GUI.Button(new Rect(5, windowSize.y - 35, position.width - 10, 30), "Build"))
+        {
+
+        }
         //editorScript.OnGUI(editorRect);
     }
 
