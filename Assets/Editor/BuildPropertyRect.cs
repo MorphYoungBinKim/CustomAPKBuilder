@@ -19,22 +19,22 @@ public class BuildPropertyRect
 
     public void OnGUI(Rect rect)
     {
-       /* guiStyle = new GUIStyle(EditorStyles.);
-        guiStyle.fixedHeight = rect.height;
-        GUI.Box(rect, "", new GUIStyle(EditorStyles.toolbar));*/
         try
         {
             GUILayout.BeginArea(rect);
+            GUILayout.Space(5);
+            GUILayout.Label("APK Info",EditorStyles.boldLabel);
+            GUILayout.Space(5);
             GUILayout.BeginHorizontal();
             GUILayout.Space(10);
             TitleToolTip("APKName", "Build APK Name");
             GUILayout.Space(-60);
             AutoBuilderWindow.Buildinfo.AppName = EditorGUILayout.TextField(AutoBuilderWindow.Buildinfo.AppName);
             GUILayout.EndHorizontal();
-
+            GUILayout.Space(3);
             GUILayout.BeginHorizontal();
             GUILayout.Space(10);
-            TitleToolTip("APKPath", "Build APK Name");
+            TitleToolTip("APKPath", "Build APK Path");
             GUILayout.Space(-60);
             AutoBuilderWindow.Buildinfo.BuildPath = EditorGUILayout.TextField(AutoBuilderWindow.Buildinfo.BuildPath);
             if (GUILayout.Button("Path"))
@@ -42,6 +42,37 @@ public class BuildPropertyRect
                 AutoBuilderWindow.Buildinfo.BuildPath = EditorUtility.OpenFolderPanel("Path", "","");
             }
             GUILayout.EndHorizontal();
+            GUILayout.Space(3);
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(10);
+            TitleToolTip("AppVersion", "Build APK Version");
+            GUILayout.Space(-60);
+            AutoBuilderWindow.Buildinfo.AppVersion = EditorGUILayout.TextField(AutoBuilderWindow.Buildinfo.AppVersion, GUILayout.Width(100));
+            GUILayout.Space(40);
+            TitleToolTip("VersionCode", "APK Version Code");
+            GUILayout.Space(-60);
+            AutoBuilderWindow.Buildinfo.VersionCode = EditorGUILayout.IntField(AutoBuilderWindow.Buildinfo.VersionCode, GUILayout.Width(100));
+            GUILayout.EndHorizontal();
+            GUILayout.Space(3);
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(10);
+            TitleToolTip("Build Target", "Build Platform Target");
+            GUILayout.Space(-60);
+            AutoBuilderWindow.Buildinfo.TargetPlatform = (BuildTarget)EditorGUILayout.EnumPopup(AutoBuilderWindow.Buildinfo.TargetPlatform);
+            GUILayout.EndHorizontal();
+            GUILayout.Space(3);
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(10);
+            TitleToolTip("Build Type", "Build APK Type");
+            GUILayout.Space(-60);
+            AutoBuilderWindow.Buildinfo.TargetType = (BuildType)EditorGUILayout.EnumPopup(AutoBuilderWindow.Buildinfo.TargetType);
+            GUILayout.EndHorizontal();
+            GUILayout.Space(3);
+            
+            //Handles.DrawLine(new Vector2(rect.x + 10, rect.y), new Vector2(rect.width - 10, rect.y));
+
+
+
             //SerializedProperty customEvent = SerializedObject.FindProperty("OnCheckEvent");
             //AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeBuild.;// = EditorGUILayout.PropertyField(customEvent);
             //SerializedProperty sprop = Editor.serializedObject.FindProperty("myEvent");
@@ -57,6 +88,7 @@ public class BuildPropertyRect
 
             //Debug.Log(AutoBuilderWindow.Buildinfo.AppName);
             //GUILayout.Space(-20);
+            GUILayout.Space(3);
             tabIndex = GUILayout.Toolbar(tabIndex, tabString);
             switch (tabIndex)
             {
