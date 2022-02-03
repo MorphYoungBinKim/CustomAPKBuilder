@@ -14,7 +14,7 @@ public class BuildInfoClass
     public string AppVersion;
     public int VersionCode;
     public BuildType TargetType;
-    public BuildTarget TargetPlatform;
+    public BuildPlatform TargetPlatform;
 
     //BuildEvent
     public BuildEventClass BuildEvent;
@@ -31,10 +31,10 @@ public class BuildInfoClass
     public BuildInfoClass()
     {
         AppName = Application.productName;
-        BuildPath = Application.dataPath;
+        BuildPath = Application.dataPath.Replace("/Assets","");
         AppVersion = Application.version;
         TargetType = BuildType.Product;
-        TargetPlatform = BuildTarget.Android;
+        TargetPlatform = BuildPlatform.Android;
         BuildEvent = new BuildEventClass();
         UseKeyStore = false;
         KeyStorePath = "";
@@ -50,6 +50,13 @@ public enum BuildType
     None = 0,
     Product = 1,
     Stage = 2,
+}
+
+[SerializeField]
+public enum BuildPlatform
+{
+    Android = 0,
+    iOS = 1,
 }
 
 [SerializeField]

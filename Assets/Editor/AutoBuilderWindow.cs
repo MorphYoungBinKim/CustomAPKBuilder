@@ -71,9 +71,19 @@ public class AutoBuilderWindow : EditorWindow
         buildpropertyRect.OnGUI(propertyRect);
         if (GUI.Button(new Rect(5, windowSize.y - 35, position.width - 10, 30), "Build"))
         {
-
+            BuildAPK();
         }
         //editorScript.OnGUI(editorRect);
+    }
+
+    private void BuildAPK()
+    {
+        //BuildPipeline.BuildA
+        //EditorBuildSettings.and
+        //var Scenes = PlayerSettings.Scene
+        PlayerSettings.SplashScreen.show = false;
+        Debug.Log(buildinfo.BuildPath + "/" + buildinfo.AppName + ".APK");
+        //BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, buildinfo.BuildPath + "/" + buildinfo.AppName + ".APK",buildinfo.TargetPlatform,BuildOptions.None);
     }
 
 

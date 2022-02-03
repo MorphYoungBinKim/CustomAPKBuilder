@@ -58,7 +58,7 @@ public class BuildPropertyRect
             GUILayout.Space(10);
             TitleToolTip("Build Target", "Build Platform Target");
             GUILayout.Space(-60);
-            AutoBuilderWindow.Buildinfo.TargetPlatform = (BuildTarget)EditorGUILayout.EnumPopup(AutoBuilderWindow.Buildinfo.TargetPlatform);
+            AutoBuilderWindow.Buildinfo.TargetPlatform = (BuildPlatform)EditorGUILayout.EnumPopup(AutoBuilderWindow.Buildinfo.TargetPlatform);
             GUILayout.EndHorizontal();
             GUILayout.Space(3);
             GUILayout.BeginHorizontal();
