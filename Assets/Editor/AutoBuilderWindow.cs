@@ -54,7 +54,7 @@ public class AutoBuilderWindow : EditorWindow
         position = new Rect(80, 150, minSize.x, minSize.y);
         toolBar = new BuildToolBar();
         toolBarRect = new Rect(0, 0, position.width, 18);
-        propertyRect = new Rect(5, 25, position.width-10, 300);
+        propertyRect = new Rect(5, 25, position.width-10, 500);
         buildpropertyRect = new BuildPropertyRect();
         buildpropertyRect.Init();
         //editorScript = new EditorScript();
@@ -65,10 +65,11 @@ public class AutoBuilderWindow : EditorWindow
 
     private void OnGUI()
     {
+
         //var guiStyle = new GUIStyle(EditorStyles.helpBox);
         //GUI.Box(new Rect(0, 0, maxSize.x, maxSize.y), "", guiStyle);
         toolBar.OnGUI(toolBarRect);
-        buildpropertyRect.OnGUI(propertyRect);
+        buildpropertyRect.OnGUIActive(propertyRect);
         if (GUI.Button(new Rect(5, windowSize.y - 35, position.width - 10, 30), "Build"))
         {
             BuildAPK();

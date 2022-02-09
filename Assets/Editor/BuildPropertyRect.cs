@@ -4,26 +4,27 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class BuildPropertyRect
+public class BuildPropertyRect : EditorWindow
 {
     private GUIStyle guiStyle;
     private int tabIndex = 0;
-    private string[] tabString = { "Event", "File" };
+    private string[] tabString = { "Scene", "Event", "File" };
 
     private string appName;// { get { return appName; } set { AutoBuilderWindow.Buildinfo.AppName = value; } }
 
     public void Init()
     {
         appName = AutoBuilderWindow.Buildinfo.AppName;
+        Debug.Log(EditorBuildSettings.GetConfigObjectNames()[0]);
     }
 
-    public void OnGUI(Rect rect)
+    public void OnGUIActive(Rect rect)
     {
         try
         {
             GUILayout.BeginArea(rect);
             GUILayout.Space(5);
-            GUILayout.Label("APK Info",EditorStyles.boldLabel);
+            GUILayout.Label("APK Info", EditorStyles.boldLabel);
             GUILayout.Space(5);
             GUILayout.BeginHorizontal();
             GUILayout.Space(10);
@@ -39,7 +40,7 @@ public class BuildPropertyRect
             AutoBuilderWindow.Buildinfo.BuildPath = EditorGUILayout.TextField(AutoBuilderWindow.Buildinfo.BuildPath);
             if (GUILayout.Button("Path"))
             {
-                AutoBuilderWindow.Buildinfo.BuildPath = EditorUtility.OpenFolderPanel("Path", "","");
+                AutoBuilderWindow.Buildinfo.BuildPath = EditorUtility.OpenFolderPanel("Path", "", "");
             }
             GUILayout.EndHorizontal();
             GUILayout.Space(3);
@@ -68,7 +69,7 @@ public class BuildPropertyRect
             AutoBuilderWindow.Buildinfo.TargetType = (BuildType)EditorGUILayout.EnumPopup(AutoBuilderWindow.Buildinfo.TargetType);
             GUILayout.EndHorizontal();
             GUILayout.Space(3);
-            
+
             //Handles.DrawLine(new Vector2(rect.x + 10, rect.y), new Vector2(rect.width - 10, rect.y));
 
 
@@ -105,7 +106,7 @@ public class BuildPropertyRect
             //Debug.Log(AutoBuilderWindow.Buildinfo.AppName);
             GUILayout.EndArea();
             //Refresh();
-            
+
         }
         catch
         {
@@ -115,10 +116,43 @@ public class BuildPropertyRect
 
     private void Refresh()
     {
-       appName = AutoBuilderWindow.Buildinfo.AppName;
+        appName = AutoBuilderWindow.Buildinfo.AppName;
     }
 
-    private void OnGUI_Main() { GUILayout.Label("Main"); }
+    [SerializeField]
+    public List<SceneAsset> SceneSetting;
+
+    private SerializedObject serializedObject;
+
+    private void OnEnable()
+    {
+        serializedObject = new SerializedObject(this);
+    }
+
+    private void OnGUI_Main()
+    {
+        try
+        { 
+        //EditorGUILayout.PropertyField(serializedObject.FindProperty("exampleField");
+        GUILayout.BeginVertical();
+
+        if (serializedObject != null)
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("SceneSetting"));
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        GUILayout.EndVertical();
+            /*
+            EditorGUILayout.PropertyField(m_GameObjectProp, new GUIContent("Int Field"));
+            GUILayout.Label("Main");*/
+        }
+        catch
+        {
+
+        }
+
+    }
     private void OnGUI_View() { GUILayout.Label("View"); }
     private void OnGUI_Setting() { GUILayout.Label("Setting"); }
 
@@ -128,7 +162,7 @@ public class BuildPropertyRect
         GUILayout.Label(guicontent, GUILayout.Width(150));
     }
 
-    protected void TextLabel(string title , string tooltip , string type)
+    protected void TextLabel(string title, string tooltip, string type)
     {
         GUILayout.BeginHorizontal();
         GUILayout.Space(20);
