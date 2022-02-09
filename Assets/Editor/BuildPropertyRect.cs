@@ -15,7 +15,13 @@ public class BuildPropertyRect : EditorWindow
     public void Init()
     {
         appName = AutoBuilderWindow.Buildinfo.AppName;
-        Debug.Log(EditorBuildSettings.GetConfigObjectNames()[0]);
+        SceneSetting = new List<SceneAsset>();
+        foreach (var scene in EditorBuildSettings.scenes)
+        {
+            if (scene.enabled)
+                SceneSetting.Add(AssetDatabase.LoadAssetAtPath<SceneAsset>(scene.path));
+        }
+        serializedObject = new SerializedObject(this);
     }
 
     public void OnGUIActive(Rect rect)
@@ -122,38 +128,76 @@ public class BuildPropertyRect : EditorWindow
     [SerializeField]
     public List<SceneAsset> SceneSetting;
 
-    private SerializedObject serializedObject;
+    public UnityEvent EventSetting;
 
-    private void OnEnable()
-    {
-        serializedObject = new SerializedObject(this);
-    }
+    private SerializedObject serializedObject;
 
     private void OnGUI_Main()
     {
         try
-        { 
-        //EditorGUILayout.PropertyField(serializedObject.FindProperty("exampleField");
-        GUILayout.BeginVertical();
-
-        if (serializedObject != null)
         {
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("SceneSetting"));
-            serializedObject.ApplyModifiedProperties();
-        }
+            GUILayout.BeginVertical();
 
-        GUILayout.EndVertical();
-            /*
-            EditorGUILayout.PropertyField(m_GameObjectProp, new GUIContent("Int Field"));
-            GUILayout.Label("Main");*/
+            if (serializedObject != null)
+            {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("SceneSetting"));
+                serializedObject.ApplyModifiedProperties();
+
+            }
+
+            if (GUI.changed)
+            {
+                ApplySceneData();
+            }
+            GUILayout.EndVertical();
+
         }
         catch
         {
 
+
         }
 
     }
-    private void OnGUI_View() { GUILayout.Label("View"); }
+
+    public void ApplySceneData()
+    {
+        List<EditorBuildSettingsScene> editorBuildSettingsScenes = new List<EditorBuildSettingsScene>();
+        foreach (var sceneAsset in SceneSetting)
+        {
+            string scenePath = AssetDatabase.GetAssetPath(sceneAsset);
+            if (!string.IsNullOrEmpty(scenePath))
+                editorBuildSettingsScenes.Add(new EditorBuildSettingsScene(scenePath, true));
+        }
+        EditorBuildSettings.scenes = editorBuildSettingsScenes.ToArray();
+    }
+
+    private void OnGUI_View()
+    {
+        try
+        {
+            GUILayout.BeginVertical();
+
+            if (serializedObject != null)
+            {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("EventSetting"));
+                serializedObject.ApplyModifiedProperties();
+
+            }
+
+            if (GUI.changed)
+            {
+                //ApplySceneData();
+            }
+            GUILayout.EndVertical();
+
+        }
+        catch
+        {
+
+
+        }
+    }
     private void OnGUI_Setting() { GUILayout.Label("Setting"); }
 
     protected void TitleToolTip(string title, string tootip)

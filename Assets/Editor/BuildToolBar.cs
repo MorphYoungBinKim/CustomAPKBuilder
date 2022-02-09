@@ -52,7 +52,7 @@ public class BuildToolBar
         var guicontent = new GUIContent("Save", "Build 정보 저장");
         if (GUILayout.Button(guicontent, guiStyle))
         {
-            int count = 0;
+            //int count = 0;
         }
     }
 

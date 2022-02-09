@@ -36,7 +36,7 @@ public class AutoBuilderWindow : EditorWindow
 
     private BuildToolBar toolBar;
     private BuildPropertyRect buildpropertyRect;
-    private Vector2 windowSize = new Vector2(500, 500);
+    private Vector2 windowSize = new Vector2(500, 700);
     private Rect toolBarRect;
     private Rect propertyRect;
 
@@ -54,7 +54,7 @@ public class AutoBuilderWindow : EditorWindow
         position = new Rect(80, 150, minSize.x, minSize.y);
         toolBar = new BuildToolBar();
         toolBarRect = new Rect(0, 0, position.width, 18);
-        propertyRect = new Rect(5, 25, position.width-10, 500);
+        propertyRect = new Rect(5, 25, position.width-10, 700);
         buildpropertyRect = new BuildPropertyRect();
         buildpropertyRect.Init();
         //editorScript = new EditorScript();
@@ -88,7 +88,7 @@ public class AutoBuilderWindow : EditorWindow
     }
 
 
-    #region ShowWindowr
+    #region ShowWindow
     [MenuItem("Build/BuildAPK", false, 300)]
     static void ShowWindow()
     {
