@@ -10,7 +10,7 @@ public class BuildPropertyRect : EditorWindow
     private int tabIndex = 0;
     private string[] tabString = { "Scene", "Event", "File" };
 
-    private string appName;// { get { return appName; } set { AutoBuilderWindow.Buildinfo.AppName = value; } }
+    private string appName;
 
     public void Init()
     {
@@ -21,6 +21,14 @@ public class BuildPropertyRect : EditorWindow
             if (scene.enabled)
                 SceneSetting.Add(AssetDatabase.LoadAssetAtPath<SceneAsset>(scene.path));
         }
+        
+        OnBeforeBuild = AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeBuild;
+        OnAfterBuild = AutoBuilderWindow.Buildinfo.BuildEvent.OnAfterBuild;
+        OnBeforeProductBuild = AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeProductBuild;
+        OnAfterProductBuild = AutoBuilderWindow.Buildinfo.BuildEvent.OnAfterProductBuild;
+        OnBeforeStageBuild = AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeStageBuild;
+        OnAfterStageBuild = AutoBuilderWindow.Buildinfo.BuildEvent.OnAfterStageBuild;
+
         serializedObject = new SerializedObject(this);
     }
 
@@ -100,7 +108,7 @@ public class BuildPropertyRect : EditorWindow
             switch (tabIndex)
             {
                 case 0:
-                    OnGUI_Main();
+                    OnGUI_Scene();
                     break;
                 case 1:
                     OnGUI_View();
@@ -127,30 +135,38 @@ public class BuildPropertyRect : EditorWindow
 
     [SerializeField]
     public List<SceneAsset> SceneSetting;
+    public Vector2 SceneScroll;
 
-    public UnityEvent EventSetting;
+    public UnityEvent OnBeforeBuild;
+    public UnityEvent OnAfterBuild;
+    public UnityEvent OnBeforeProductBuild;
+    public UnityEvent OnAfterProductBuild;
+    public UnityEvent OnBeforeStageBuild;
+    public UnityEvent OnAfterStageBuild;
 
     private SerializedObject serializedObject;
 
-    private void OnGUI_Main()
+    private void OnGUI_Scene()
     {
         try
         {
-            GUILayout.BeginVertical();
-
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(10);
+            SceneScroll = GUILayout.BeginScrollView(SceneScroll, GUILayout.Height(470));
             if (serializedObject != null)
             {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("SceneSetting"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("SceneSetting"), GUILayout.Width(460));
                 serializedObject.ApplyModifiedProperties();
-
+                
             }
 
             if (GUI.changed)
             {
                 ApplySceneData();
             }
-            GUILayout.EndVertical();
-
+            
+            GUILayout.EndScrollView();
+            GUILayout.EndHorizontal();
         }
         catch
         {
@@ -176,28 +192,58 @@ public class BuildPropertyRect : EditorWindow
     {
         try
         {
-            GUILayout.BeginVertical();
+            //GUILayout.BeginHorizontal();
+            GUILayout.Label("Event Setting", EditorStyles.boldLabel);
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(10);
+            
+            SceneScroll = GUILayout.BeginScrollView(SceneScroll, GUILayout.Height(455));
 
             if (serializedObject != null)
             {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("EventSetting"));
+                Debug.Log(serializedObject.FindProperty("OnBeforeBuild"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("OnBeforeBuild"), GUILayout.Width(460));
+                GUILayout.Space(10);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("OnAfterBuild"), GUILayout.Width(460));
+                GUILayout.Space(10);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("OnBeforeProductBuild"), GUILayout.Width(460));
+                GUILayout.Space(10);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("OnAfterProductBuild"), GUILayout.Width(460));
+                GUILayout.Space(10);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("OnBeforeStageBuild"), GUILayout.Width(460));
+                GUILayout.Space(10);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("OnAfterStageBuild"), GUILayout.Width(460));
+
                 serializedObject.ApplyModifiedProperties();
 
             }
 
             if (GUI.changed)
             {
-                //ApplySceneData();
+                ApplyEventData();
             }
-            GUILayout.EndVertical();
+            GUILayout.EndScrollView();
+            GUILayout.EndHorizontal();
 
         }
         catch
         {
 
-
         }
     }
+
+    public void ApplyEventData()
+    {
+        AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeBuild = OnBeforeBuild;
+        AutoBuilderWindow.Buildinfo.BuildEvent.OnAfterBuild = OnAfterBuild;
+        AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeProductBuild = OnBeforeProductBuild;
+        AutoBuilderWindow.Buildinfo.BuildEvent.OnAfterProductBuild = OnAfterProductBuild;
+        AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeStageBuild = OnBeforeStageBuild;
+        AutoBuilderWindow.Buildinfo.BuildEvent.OnAfterStageBuild = OnAfterStageBuild;
+        Debug.Log("ResetEvent");
+        Debug.Log(AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeBuild);
+    }
+
     private void OnGUI_Setting() { GUILayout.Label("Setting"); }
 
     protected void TitleToolTip(string title, string tootip)
