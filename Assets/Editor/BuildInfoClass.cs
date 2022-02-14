@@ -32,7 +32,8 @@ public class BuildInfoClass
     {
         AppName = Application.productName;
         BuildPath = Application.dataPath.Replace("/Assets","");
-        AppVersion = Application.version;
+        AppVersion = PlayerSettings.bundleVersion;
+        VersionCode = PlayerSettings.Android.bundleVersionCode;
         TargetType = BuildType.Product;
         TargetPlatform = BuildPlatform.Android;
         BuildEvent = new BuildEventClass();

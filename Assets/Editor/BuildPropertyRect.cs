@@ -6,15 +6,25 @@ using UnityEngine.Events;
 
 public class BuildPropertyRect : EditorWindow
 {
+    [SerializeField]
+    public List<SceneAsset> SceneSetting;
+    public Vector2 SceneScroll;
+
+    public UnityEvent OnBeforeBuild;
+    public UnityEvent OnAfterBuild;
+    public UnityEvent OnBeforeProductBuild;
+    public UnityEvent OnAfterProductBuild;
+    public UnityEvent OnBeforeStageBuild;
+    public UnityEvent OnAfterStageBuild;
+
+    private SerializedObject serializedObject;
     private GUIStyle guiStyle;
     private int tabIndex = 0;
-    private string[] tabString = { "Scene", "Event", "File" };
-
-    private string appName;
+    private string[] tabString = { "Scene", "Event", "Setting" };
 
     public void Init()
     {
-        appName = AutoBuilderWindow.Buildinfo.AppName;
+
         SceneSetting = new List<SceneAsset>();
         foreach (var scene in EditorBuildSettings.scenes)
         {
@@ -84,27 +94,15 @@ public class BuildPropertyRect : EditorWindow
             GUILayout.EndHorizontal();
             GUILayout.Space(3);
 
-            //Handles.DrawLine(new Vector2(rect.x + 10, rect.y), new Vector2(rect.width - 10, rect.y));
+            if(GUI.changed)
+            {
+                PlayerSettings.bundleVersion = AutoBuilderWindow.Buildinfo.AppVersion;
+                PlayerSettings.Android.bundleVersionCode = AutoBuilderWindow.Buildinfo.VersionCode;
+            }
 
-
-
-            //SerializedProperty customEvent = SerializedObject.FindProperty("OnCheckEvent");
-            //AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeBuild.;// = EditorGUILayout.PropertyField(customEvent);
-            //SerializedProperty sprop = Editor.serializedObject.FindProperty("myEvent");
-            //EditorGUILayout.PropertyField()
-
-
-
-
-
-            //bug.Log(AutoBuilderWindow.Buildinfo.AppName);
-
-            //TextLabel("APKName", "Build APK Name", AutoBuilderWindow.Buildinfo.AppName);
-
-            //Debug.Log(AutoBuilderWindow.Buildinfo.AppName);
-            //GUILayout.Space(-20);
             GUILayout.Space(3);
             tabIndex = GUILayout.Toolbar(tabIndex, tabString);
+
             switch (tabIndex)
             {
                 case 0:
@@ -117,9 +115,8 @@ public class BuildPropertyRect : EditorWindow
                     OnGUI_Setting();
                     break;
             }
-            //Debug.Log(AutoBuilderWindow.Buildinfo.AppName);
+
             GUILayout.EndArea();
-            //Refresh();
 
         }
         catch
@@ -127,24 +124,6 @@ public class BuildPropertyRect : EditorWindow
 
         }
     }
-
-    private void Refresh()
-    {
-        appName = AutoBuilderWindow.Buildinfo.AppName;
-    }
-
-    [SerializeField]
-    public List<SceneAsset> SceneSetting;
-    public Vector2 SceneScroll;
-
-    public UnityEvent OnBeforeBuild;
-    public UnityEvent OnAfterBuild;
-    public UnityEvent OnBeforeProductBuild;
-    public UnityEvent OnAfterProductBuild;
-    public UnityEvent OnBeforeStageBuild;
-    public UnityEvent OnAfterStageBuild;
-
-    private SerializedObject serializedObject;
 
     private void OnGUI_Scene()
     {
@@ -192,7 +171,6 @@ public class BuildPropertyRect : EditorWindow
     {
         try
         {
-            //GUILayout.BeginHorizontal();
             GUILayout.Label("Event Setting", EditorStyles.boldLabel);
             GUILayout.BeginHorizontal();
             GUILayout.Space(10);
@@ -201,7 +179,6 @@ public class BuildPropertyRect : EditorWindow
 
             if (serializedObject != null)
             {
-                Debug.Log(serializedObject.FindProperty("OnBeforeBuild"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("OnBeforeBuild"), GUILayout.Width(460));
                 GUILayout.Space(10);
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("OnAfterBuild"), GUILayout.Width(460));
@@ -240,11 +217,90 @@ public class BuildPropertyRect : EditorWindow
         AutoBuilderWindow.Buildinfo.BuildEvent.OnAfterProductBuild = OnAfterProductBuild;
         AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeStageBuild = OnBeforeStageBuild;
         AutoBuilderWindow.Buildinfo.BuildEvent.OnAfterStageBuild = OnAfterStageBuild;
-        Debug.Log("ResetEvent");
-        Debug.Log(AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeBuild);
     }
 
-    private void OnGUI_Setting() { GUILayout.Label("Setting"); }
+    private void OnGUI_Setting()
+    {
+        GUILayout.Label("Custom Setting", EditorStyles.boldLabel);
+        GUILayout.Space(5);
+        GUILayout.BeginHorizontal();
+        GUILayout.Space(10);
+        TitleToolTip("Manifest", "Use Manifest for Schema");
+        GUILayout.Space(-60);
+        
+        if(AutoBuilderWindow.Buildinfo.UseSchema = EditorGUILayout.Toggle(AutoBuilderWindow.Buildinfo.UseSchema))
+        {
+            GUILayout.EndHorizontal();
+            GUILayout.Space(5);
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(20);
+            TitleToolTip("Schema Name", "Use Manifest for Schema");
+            GUILayout.Space(-20);
+            AutoBuilderWindow.Buildinfo.SchemaName = EditorGUILayout.TextField(AutoBuilderWindow.Buildinfo.SchemaName , GUILayout.Width(330));
+            GUILayout.EndHorizontal();
+            GUILayout.Space(5);
+        }
+        else
+        {
+            GUILayout.EndHorizontal();
+            GUILayout.Space(5);
+            GUI.enabled = false;
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(20);
+            TitleToolTip("Schema Name", "Use Manifest for Schema");
+            GUILayout.Space(-20);
+            AutoBuilderWindow.Buildinfo.SchemaName = EditorGUILayout.TextField(AutoBuilderWindow.Buildinfo.SchemaName, GUILayout.Width(330));
+            GUILayout.EndHorizontal();
+            GUILayout.Space(5);
+            GUI.enabled = true;
+        }
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Space(10);
+        TitleToolTip("Key Store", "Use KeySotre for Publish");
+        GUILayout.Space(-60);
+
+        if (AutoBuilderWindow.Buildinfo.UseKeyStore = EditorGUILayout.Toggle(AutoBuilderWindow.Buildinfo.UseKeyStore))
+        {
+            GUILayout.EndHorizontal();
+            GUILayout.Space(5);
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(20);
+            TitleToolTip("KeyStore Path", "KeyStore Local Path");
+            GUILayout.Space(-20);
+            AutoBuilderWindow.Buildinfo.KeyStorePath = EditorGUILayout.TextField(AutoBuilderWindow.Buildinfo.KeyStorePath, GUILayout.Width(330));
+            GUILayout.EndHorizontal();
+            GUILayout.Space(3);
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(20);
+            TitleToolTip("KeyStore PassWord", "KeyStore PassWord");
+            GUILayout.Space(-20);
+            AutoBuilderWindow.Buildinfo.KeyStorePassWord = EditorGUILayout.PasswordField(AutoBuilderWindow.Buildinfo.KeyStorePath, GUILayout.Width(330));
+            GUILayout.EndHorizontal();
+            GUILayout.Space(5);
+        }
+        else
+        {
+            GUILayout.EndHorizontal();
+            GUILayout.Space(5);
+            GUI.enabled = false;
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(20);
+            TitleToolTip("KeyStore Path", "KeyStore Local Path");
+            GUILayout.Space(-20);
+            AutoBuilderWindow.Buildinfo.KeyStorePath = EditorGUILayout.TextField(AutoBuilderWindow.Buildinfo.KeyStorePath, GUILayout.Width(330));
+            GUILayout.EndHorizontal();
+            GUILayout.Space(3);
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(20);
+            TitleToolTip("KeyStore PassWord", "KeyStore PassWord");
+            GUILayout.Space(-20);
+            AutoBuilderWindow.Buildinfo.KeyStorePassWord = EditorGUILayout.PasswordField(AutoBuilderWindow.Buildinfo.KeyStorePath, GUILayout.Width(330));
+            GUILayout.EndHorizontal();
+            GUILayout.Space(5);
+            GUI.enabled = true;
+        }
+    }
 
     protected void TitleToolTip(string title, string tootip)
     {
