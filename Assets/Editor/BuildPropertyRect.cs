@@ -222,6 +222,7 @@ public class BuildPropertyRect : EditorWindow
     private void OnGUI_Setting()
     {
         GUILayout.Label("Custom Setting", EditorStyles.boldLabel);
+        SceneScroll = GUILayout.BeginScrollView(SceneScroll, GUILayout.Height(455));
         GUILayout.Space(5);
         GUILayout.BeginHorizontal();
         GUILayout.Space(10);
@@ -300,6 +301,8 @@ public class BuildPropertyRect : EditorWindow
             GUILayout.Space(5);
             GUI.enabled = true;
         }
+
+        GUILayout.EndScrollView();
     }
 
     protected void TitleToolTip(string title, string tootip)

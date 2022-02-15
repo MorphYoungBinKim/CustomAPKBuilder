@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEditorInternal;
 using UnityEngine.Events;
+using System;
 
 public class AutoBuilderWindow : EditorWindow
 {
@@ -80,11 +81,59 @@ public class AutoBuilderWindow : EditorWindow
 
     private void BuildAPK()
     {
+        PlayerSettings.SplashScreen.show = false;
+
+        if (Buildinfo.BuildEvent.OnBeforeBuild != null)
+            Buildinfo.BuildEvent.OnBeforeBuild.Invoke();
+
+        switch (Buildinfo.TargetType)
+        {
+
+            case BuildType.None:
+            case BuildType.Product:
+                if (Buildinfo.BuildEvent.OnBeforeProductBuild != null)
+                    Buildinfo.BuildEvent.OnBeforeProductBuild.Invoke();
+                    break;
+
+            case BuildType.Stage:
+                if (Buildinfo.BuildEvent.OnBeforeStageBuild != null)
+                    Buildinfo.BuildEvent.OnBeforeStageBuild.Invoke();
+                break;
+
+        }
+
+        string Date = DateTime.Now.ToString("yyyyMMdd");
+
+        string path = string.Format("{0}/{1}_v{2}_{3}_{4}.apk", buildinfo.BuildPath, buildinfo.AppName, buildinfo.AppVersion, Buildinfo.TargetType == BuildType.Product ? "Prod" : "STG", Date);
+        Debug.Log(path);
+        var apk = BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, path , buildinfo.TargetPlatform == BuildPlatform.Android ? BuildTarget.Android : BuildTarget.iOS , BuildOptions.None);
+
+        if (Buildinfo.BuildEvent.OnAfterBuild != null)
+            Buildinfo.BuildEvent.OnAfterBuild.Invoke();
+
+        switch (Buildinfo.TargetType)
+        {
+
+            case BuildType.None:
+            case BuildType.Product:
+                if (Buildinfo.BuildEvent.OnAfterProductBuild != null)
+                    Buildinfo.BuildEvent.OnAfterProductBuild.Invoke();
+                break;
+
+            case BuildType.Stage:
+                if (Buildinfo.BuildEvent.OnAfterStageBuild != null)
+                    Buildinfo.BuildEvent.OnAfterStageBuild.Invoke();
+                break;
+
+        }
+
+        System.Diagnostics.Process.Start(buildinfo.BuildPath);
+        //var apk = BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, path  + ".APK", buildinfo.TargetPlatform, BuildOptions.None);
         //BuildPipeline.BuildA
         //EditorBuildSettings.and
         //var Scenes = PlayerSettings.Scene
-        PlayerSettings.SplashScreen.show = false;
-        Debug.Log(buildinfo.BuildPath + "/" + buildinfo.AppName + ".APK");
+
+        //Debug.Log(buildinfo.BuildPath + "/" + buildinfo.AppName + ".APK");
         //BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, buildinfo.BuildPath + "/" + buildinfo.AppName + ".APK",buildinfo.TargetPlatform,BuildOptions.None);
     }
 
