@@ -224,6 +224,24 @@ public class BuildPropertyRect : EditorWindow
         GUILayout.Label("Custom Setting", EditorStyles.boldLabel);
         SceneScroll = GUILayout.BeginScrollView(SceneScroll, GUILayout.Height(455));
         GUILayout.Space(5);
+
+
+        TitleToolTip("Company Name", "");
+        GUILayout.Space(5);
+        GUILayout.TextField(PlayerSettings.companyName);
+        GUILayout.Space(5);
+        TitleToolTip("Product Name", "");
+        GUILayout.Space(5);
+        GUILayout.TextField(PlayerSettings.productName);
+        GUILayout.Space(5);
+        TitleToolTip("MinSDK", "");
+        GUILayout.Space(5);
+        EditorGUILayout.EnumPopup(PlayerSettings.Android.minSdkVersion);
+        GUILayout.Space(5);
+        TitleToolTip("Target SDK", "");
+        GUILayout.Space(5);
+        EditorGUILayout.EnumPopup(PlayerSettings.Android.targetSdkVersion);
+        GUILayout.Space(5);
         GUILayout.BeginHorizontal();
         GUILayout.Space(10);
         TitleToolTip("Manifest", "Use Manifest for Schema");
