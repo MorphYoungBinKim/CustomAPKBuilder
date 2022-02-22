@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
-[SerializeField]
+[Serializable,SerializeField]
 public class BuildInfoClass
 {
     // APK 기본 정보
@@ -17,7 +17,14 @@ public class BuildInfoClass
     public BuildPlatform TargetPlatform;
 
     //BuildEvent
+    [SerializeField]
     public BuildEventClass BuildEvent;
+
+    // other Setting
+    public string CompanyName;
+    public string ProductName;
+    public AndroidSdkVersions minSdkVersion;
+    public AndroidSdkVersions targetSdkVersion;
 
     //KeyStore
     public bool UseKeyStore;
@@ -30,6 +37,8 @@ public class BuildInfoClass
 
     public BuildInfoClass()
     {
+        try
+        { 
         AppName = Application.productName;
         BuildPath = Application.dataPath.Replace("/Assets","");
         AppVersion = PlayerSettings.bundleVersion;
@@ -37,11 +46,20 @@ public class BuildInfoClass
         TargetType = BuildType.Product;
         TargetPlatform = BuildPlatform.Android;
         BuildEvent = new BuildEventClass();
+        CompanyName = PlayerSettings.companyName;
+        ProductName = PlayerSettings.productName;
+        minSdkVersion = PlayerSettings.Android.minSdkVersion;
+        targetSdkVersion = PlayerSettings.Android.targetSdkVersion;
         UseKeyStore = false;
         KeyStorePath = "";
         KeyStorePassWord = "";
         UseSchema = false;
         SchemaName = "";
+        }
+        catch
+        {
+
+        }
     }
 }
 
@@ -60,7 +78,7 @@ public enum BuildPlatform
     iOS = 1,
 }
 
-[SerializeField]
+[Serializable]
 public class BuildEventClass
 {
     public UnityEvent OnBeforeBuild;

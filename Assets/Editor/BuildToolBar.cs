@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.IO;
 
 public class BuildToolBar
 {
@@ -52,7 +53,12 @@ public class BuildToolBar
         var guicontent = new GUIContent("Save", "Build 정보 저장");
         if (GUILayout.Button(guicontent, guiStyle))
         {
-            //int count = 0;
+            var json = JsonUtility.ToJson(AutoBuilderWindow.Buildinfo, true);
+
+            var path = Application.dataPath + "/CustomBuildInfo.json";
+
+            File.WriteAllText(path, json);
+            System.Diagnostics.Process.Start(Application.dataPath);
         }
     }
 

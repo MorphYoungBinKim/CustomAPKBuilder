@@ -137,7 +137,6 @@ public class AutoBuilderWindow : EditorWindow
         //BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, buildinfo.BuildPath + "/" + buildinfo.AppName + ".APK",buildinfo.TargetPlatform,BuildOptions.None);
     }
 
-
     #region ShowWindow
     [MenuItem("Build/BuildAPK", false, 300)]
     static void ShowWindow()

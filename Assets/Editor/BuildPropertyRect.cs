@@ -31,7 +31,7 @@ public class BuildPropertyRect : EditorWindow
             if (scene.enabled)
                 SceneSetting.Add(AssetDatabase.LoadAssetAtPath<SceneAsset>(scene.path));
         }
-        
+
         OnBeforeBuild = AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeBuild;
         OnAfterBuild = AutoBuilderWindow.Buildinfo.BuildEvent.OnAfterBuild;
         OnBeforeProductBuild = AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeProductBuild;
@@ -94,7 +94,7 @@ public class BuildPropertyRect : EditorWindow
             GUILayout.EndHorizontal();
             GUILayout.Space(3);
 
-            if(GUI.changed)
+            if (GUI.changed)
             {
                 PlayerSettings.bundleVersion = AutoBuilderWindow.Buildinfo.AppVersion;
                 PlayerSettings.Android.bundleVersionCode = AutoBuilderWindow.Buildinfo.VersionCode;
@@ -136,14 +136,14 @@ public class BuildPropertyRect : EditorWindow
             {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("SceneSetting"), GUILayout.Width(460));
                 serializedObject.ApplyModifiedProperties();
-                
+
             }
 
             if (GUI.changed)
             {
                 ApplySceneData();
             }
-            
+
             GUILayout.EndScrollView();
             GUILayout.EndHorizontal();
         }
@@ -171,11 +171,13 @@ public class BuildPropertyRect : EditorWindow
     {
         try
         {
+            GUILayout.Space(5);
             GUILayout.Label("Event Setting", EditorStyles.boldLabel);
+            GUILayout.Space(5);
             GUILayout.BeginHorizontal();
             GUILayout.Space(10);
-            
-            SceneScroll = GUILayout.BeginScrollView(SceneScroll, GUILayout.Height(455));
+
+            SceneScroll = GUILayout.BeginScrollView(SceneScroll, GUILayout.Height(445));
 
             if (serializedObject != null)
             {
@@ -221,33 +223,55 @@ public class BuildPropertyRect : EditorWindow
 
     private void OnGUI_Setting()
     {
+        GUILayout.Space(5);
         GUILayout.Label("Custom Setting", EditorStyles.boldLabel);
         SceneScroll = GUILayout.BeginScrollView(SceneScroll, GUILayout.Height(455));
         GUILayout.Space(5);
 
-
+        GUILayout.BeginHorizontal();
+        GUILayout.Space(20);
         TitleToolTip("Company Name", "");
-        GUILayout.Space(5);
-        GUILayout.TextField(PlayerSettings.companyName);
-        GUILayout.Space(5);
-        TitleToolTip("Product Name", "");
-        GUILayout.Space(5);
-        GUILayout.TextField(PlayerSettings.productName);
-        GUILayout.Space(5);
-        TitleToolTip("MinSDK", "");
-        GUILayout.Space(5);
-        EditorGUILayout.EnumPopup(PlayerSettings.Android.minSdkVersion);
-        GUILayout.Space(5);
-        TitleToolTip("Target SDK", "");
-        GUILayout.Space(5);
-        EditorGUILayout.EnumPopup(PlayerSettings.Android.targetSdkVersion);
+        GUILayout.Space(-20);
+        AutoBuilderWindow.Buildinfo.CompanyName = GUILayout.TextField(AutoBuilderWindow.Buildinfo.CompanyName);
+        GUILayout.EndHorizontal();
         GUILayout.Space(5);
         GUILayout.BeginHorizontal();
-        GUILayout.Space(10);
-        TitleToolTip("Manifest", "Use Manifest for Schema");
-        GUILayout.Space(-60);
-        
-        if(AutoBuilderWindow.Buildinfo.UseSchema = EditorGUILayout.Toggle(AutoBuilderWindow.Buildinfo.UseSchema))
+        GUILayout.Space(20);
+        TitleToolTip("Product Name", "");
+        GUILayout.Space(-20);
+        AutoBuilderWindow.Buildinfo.ProductName = GUILayout.TextField(AutoBuilderWindow.Buildinfo.ProductName);
+        GUILayout.EndHorizontal();
+        GUILayout.Space(20);
+        if (AutoBuilderWindow.Buildinfo.TargetPlatform == BuildPlatform.Android)
+        {
+            GUILayout.Label("Android SDK", EditorStyles.boldLabel);
+            GUILayout.Space(5);
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(20);
+            TitleToolTip("MinSDK", "");
+            GUILayout.Space(-20);
+            AutoBuilderWindow.Buildinfo.minSdkVersion = (AndroidSdkVersions)EditorGUILayout.EnumPopup(AutoBuilderWindow.Buildinfo.minSdkVersion);
+            GUILayout.EndHorizontal();
+            GUILayout.Space(5);
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(20);
+            TitleToolTip("Target SDK", "");
+            GUILayout.Space(-20);
+            AutoBuilderWindow.Buildinfo.targetSdkVersion = (AndroidSdkVersions)EditorGUILayout.EnumPopup(AutoBuilderWindow.Buildinfo.targetSdkVersion);
+            GUILayout.EndHorizontal();
+            GUILayout.Space(20);
+
+            if(GUI.changed)
+            {
+                PlayerSettings.Android.minSdkVersion = AutoBuilderWindow.Buildinfo.minSdkVersion;
+                PlayerSettings.Android.targetSdkVersion = PlayerSettings.Android.targetSdkVersion;
+            }
+        }
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Manifest", EditorStyles.boldLabel);
+        GUILayout.Space(-70);
+
+        if (AutoBuilderWindow.Buildinfo.UseSchema = EditorGUILayout.Toggle(AutoBuilderWindow.Buildinfo.UseSchema))
         {
             GUILayout.EndHorizontal();
             GUILayout.Space(5);
@@ -255,9 +279,9 @@ public class BuildPropertyRect : EditorWindow
             GUILayout.Space(20);
             TitleToolTip("Schema Name", "Use Manifest for Schema");
             GUILayout.Space(-20);
-            AutoBuilderWindow.Buildinfo.SchemaName = EditorGUILayout.TextField(AutoBuilderWindow.Buildinfo.SchemaName , GUILayout.Width(330));
+            AutoBuilderWindow.Buildinfo.SchemaName = EditorGUILayout.TextField(AutoBuilderWindow.Buildinfo.SchemaName, GUILayout.Width(330));
             GUILayout.EndHorizontal();
-            GUILayout.Space(5);
+            GUILayout.Space(20);
         }
         else
         {
@@ -270,14 +294,13 @@ public class BuildPropertyRect : EditorWindow
             GUILayout.Space(-20);
             AutoBuilderWindow.Buildinfo.SchemaName = EditorGUILayout.TextField(AutoBuilderWindow.Buildinfo.SchemaName, GUILayout.Width(330));
             GUILayout.EndHorizontal();
-            GUILayout.Space(5);
+            GUILayout.Space(20);
             GUI.enabled = true;
         }
 
         GUILayout.BeginHorizontal();
-        GUILayout.Space(10);
-        TitleToolTip("Key Store", "Use KeySotre for Publish");
-        GUILayout.Space(-60);
+        GUILayout.Label("Key Store", EditorStyles.boldLabel);
+        GUILayout.Space(-75);
 
         if (AutoBuilderWindow.Buildinfo.UseKeyStore = EditorGUILayout.Toggle(AutoBuilderWindow.Buildinfo.UseKeyStore))
         {
@@ -318,6 +341,12 @@ public class BuildPropertyRect : EditorWindow
             GUILayout.EndHorizontal();
             GUILayout.Space(5);
             GUI.enabled = true;
+        }
+
+        if (GUI.changed)
+        {
+            PlayerSettings.companyName = AutoBuilderWindow.Buildinfo.CompanyName;
+            PlayerSettings.productName = AutoBuilderWindow.Buildinfo.ProductName;
         }
 
         GUILayout.EndScrollView();
