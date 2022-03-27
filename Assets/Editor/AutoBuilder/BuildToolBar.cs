@@ -23,23 +23,13 @@ public class BuildToolBar
             GUILayout.BeginArea(rect);
             GUILayout.BeginHorizontal();
             GUILayout.Box("", guiStyle);
-            Create();
-            Refresh();
+            Save();
             Load();
-            Delete();
+            Export();
+            //Delete();
             GUILayout.Space(30);
-            //SearchField();
             GUILayout.Space(30);
             GUILayout.FlexibleSpace();
-            /*
-            if (trpBuildFormat != null)
-            {
-                OpenExplore();
-                BuildType();
-                UpLoad();
-                Save();
-                Build();
-            }*/
             GUILayout.EndHorizontal();
             GUILayout.EndArea();
         }
@@ -48,29 +38,33 @@ public class BuildToolBar
 
         }
     }
-    private void Create()
+    private void Save()
     {
         var guicontent = new GUIContent("Save", "Build 정보 저장");
         if (GUILayout.Button(guicontent, guiStyle))
         {
-            var json = JsonUtility.ToJson(AutoBuilderWindow.Buildinfo, true);
-
-            var path = Application.dataPath + "/CustomBuildInfo.json";
-
-            File.WriteAllText(path, json);
-            System.Diagnostics.Process.Start(Application.dataPath);
+            BuildCommonMethod.SaveDataObject();
         }
     }
 
     /// <summary>
     /// Refresh Button
     /// </summary>
-    private void Refresh()
+    private void Export()
     {
-        var guicontent = new GUIContent("Refresh", "새로고침");
+        var guicontent = new GUIContent("Export", "내보내기");
         if (GUILayout.Button(guicontent, guiStyle))
         {
+            string dataPath = EditorUtility.OpenFolderPanel("Path", "", "");
 
+            if (!string.IsNullOrWhiteSpace(dataPath) && Directory.Exists(dataPath))
+            {
+                BuildCommonMethod.GetSaveDataObject();
+                File.Move(BuildCommonMethod.SaveFilePath, dataPath + "/AutoBuildDataObject.asset");
+                AssetDatabase.SaveAssets();
+
+                System.Diagnostics.Process.Start(dataPath);
+            }
         }
     }
 
@@ -79,21 +73,15 @@ public class BuildToolBar
         var guicontent = new GUIContent("Load", "Build 정보 불러오기");
         if (GUILayout.Button(guicontent, guiStyle))
         {
+            string dataPath = EditorUtility.OpenFilePanel("Path", "", "asset");
 
+            if (!string.IsNullOrWhiteSpace(dataPath) && File.Exists(dataPath))
+            {
+                Debug.Log("StartLoad");
+                BuildCommonMethod.LoadDataObject(dataPath);
+            }
         }
     }
 
-    /// <summary>
-    /// Delete Button
-    /// </summary>
-    private void Delete()
-    {
-        var guicontent = new GUIContent("Delete", "Build 창 초기화");
-
-        if (GUILayout.Button(guicontent, guiStyle))
-        {
-
-        }
-    }
 }
 #endif

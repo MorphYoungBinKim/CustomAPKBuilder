@@ -24,7 +24,6 @@ public class BuildPropertyRect : EditorWindow
 
     public void Init()
     {
-
         SceneSetting = new List<SceneAsset>();
         foreach (var scene in EditorBuildSettings.scenes)
         {

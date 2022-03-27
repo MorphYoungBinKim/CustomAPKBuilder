@@ -14,7 +14,7 @@ public class AutoBuilderWindow : EditorWindow
     {
         get
         {
-            if (instance == null)
+            if(instance == null)
             {
                 instance = GetWindow<AutoBuilderWindow>();
             }
@@ -29,26 +29,55 @@ public class AutoBuilderWindow : EditorWindow
         {
             if (buildinfo == null)
             {
-                buildinfo = new BuildInfoClass();
+                if (buildinfo == null)
+                {
+                    buildinfo = new BuildInfoClass();
+                }
             }
             return buildinfo;
         }
+        set
+        {
+            buildinfo = value;
+        }
     }
 
+    public BuildInfoClass ResetSaveData()
+    {
+        var tempObject = BuildCommonMethod.GetSaveDataObject();
+        
+        if(tempObject != null)
+        {
+            Debug.Log("GetSaveDataObject Complete");
+            buildinfo = BuildCommonMethod.SetBuildInfo(tempObject.buildInfoClass);
+        }
+        else
+        {
+            Debug.Log("GetSaveDataObject : Create new class");
+            buildinfo = new BuildInfoClass();
+        }
+        return buildinfo;
+    }
+
+    [MenuItem("Build/ResetData", false, 300)]
+    public static void TestData()
+    {
+        if (instance != null)
+        {
+            instance = null;
+            Buildinfo = null;
+        }
+    }
+
+    public bool IsDatainit = false; 
     private BuildToolBar toolBar;
     private BuildPropertyRect buildpropertyRect;
     private Vector2 windowSize = new Vector2(500, 700);
     private Rect toolBarRect;
     private Rect propertyRect;
+ 
 
-    //private IList serializedObject;
-    //SerializedObject serializedObject = new SerializedObject();
-    private void OnEnable()
-    {
-        Init();
-    }
-
-    private void Init()
+    public void Init()
     {
         minSize = windowSize;
         maxSize = windowSize;
@@ -58,25 +87,41 @@ public class AutoBuilderWindow : EditorWindow
         propertyRect = new Rect(5, 25, position.width-10, 700);
         buildpropertyRect = CreateInstance<BuildPropertyRect>();
         buildpropertyRect.Init();
-        //editorScript = new EditorScript();
-        //editorRect= new Rect(0, 18, position.width, 100);
-        //ReorderableList reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("events"), true, true, true, true);
-        //List = new ReorderableList(serializedObject, serializedObject.FindProperty("events"), true, true, true, true);
+    }
+
+    public void OnEnable()
+    {
+        Init();
     }
 
     private void OnGUI()
     {
-
-        //var guiStyle = new GUIStyle(EditorStyles.helpBox);
-        //GUI.Box(new Rect(0, 0, maxSize.x, maxSize.y), "", guiStyle);
-   
+        if(!IsDatainit)
+        {
+            var a = ResetSaveData();
+            Debug.Log(a);
+            buildinfo = BuildCommonMethod.SetBuildInfo(a);
+            IsDatainit = true;
+            buildpropertyRect.Init();
+            instance.Repaint();
+        }
         toolBar.OnGUI(toolBarRect);
         buildpropertyRect.OnGUIActive(propertyRect);
         if (GUI.Button(new Rect(5, windowSize.y - 35, position.width - 10, 30), "Build"))
         {
-            BuildAPK();
+            bool isStartBuild = EditorUtility.DisplayDialog("Build Info",
+                                                "AppName : " + buildinfo.AppName + "\n" +
+                                                "App Version :  " + buildinfo.AppVersion + "\n" +
+                                                "Version Code : " + buildinfo.VersionCode + "\n" +
+                                                "Build Type :   " + buildinfo.TargetPlatform.ToString() + "\n" +
+                                                "Target Type :  " + buildinfo.TargetType
+                                                , "빌드 시작", "취소");
+
+            if (isStartBuild)
+            {
+                BuildAPK();
+            }
         }
-        //editorScript.OnGUI(editorRect);
     }
 
     private void BuildAPK()
@@ -128,13 +173,6 @@ public class AutoBuilderWindow : EditorWindow
         }
 
         System.Diagnostics.Process.Start(buildinfo.BuildPath);
-        //var apk = BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, path  + ".APK", buildinfo.TargetPlatform, BuildOptions.None);
-        //BuildPipeline.BuildA
-        //EditorBuildSettings.and
-        //var Scenes = PlayerSettings.Scene
-
-        //Debug.Log(buildinfo.BuildPath + "/" + buildinfo.AppName + ".APK");
-        //BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, buildinfo.BuildPath + "/" + buildinfo.AppName + ".APK",buildinfo.TargetPlatform,BuildOptions.None);
     }
 
     #region ShowWindow
@@ -145,8 +183,9 @@ public class AutoBuilderWindow : EditorWindow
         {
             instance.Close();
         }
-
+        //buildinfo = Buildinfo;
         instance = GetWindow<AutoBuilderWindow>();
+        
         instance.Show();
     }
     #endregion

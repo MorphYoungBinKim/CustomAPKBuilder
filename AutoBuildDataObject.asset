@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 931e68462f2ae8e49a700c366edf0169, type: 3}
+  m_Name: AutoBuildDataObject
+  m_EditorClassIdentifier: 
+  buildInfoClass:
+    AppName: CustomAPKBuilder3333
+    BuildPath: C:/Users/Bin/Documents/CustomAPKBuilder
+    AppVersion: 0.1.1
+    VersionCode: 1
+    TargetType: 1
+    TargetPlatform: 0
+    BuildEvent:
+      OnBeforeBuild:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 11500000, guid: a79d46d48dc0c7641bf5726fd42924b6, type: 3}
+            m_TargetAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_MethodName: set_name
+            m_Mode: 5
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: tttttt3
+              m_BoolArgument: 0
+            m_CallState: 2
+      OnAfterBuild:
+        m_PersistentCalls:
+          m_Calls: []
+      OnBeforeProductBuild:
+        m_PersistentCalls:
+          m_Calls: []
+      OnAfterProductBuild:
+        m_PersistentCalls:
+          m_Calls: []
+      OnBeforeStageBuild:
+        m_PersistentCalls:
+          m_Calls: []
+      OnAfterStageBuild:
+        m_PersistentCalls:
+          m_Calls: []
+    CompanyName: DefaultCompany
+    ProductName: CustomAPKBuilder
+    minSdkVersion: 25
+    targetSdkVersion: 27
+    UseKeyStore: 0
+    KeyStorePath: 
+    KeyStorePassWord: 
+    UseSchema: 0
+    SchemaName: 
