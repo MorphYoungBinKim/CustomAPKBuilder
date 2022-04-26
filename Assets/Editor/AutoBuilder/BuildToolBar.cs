@@ -58,8 +58,8 @@ public class BuildToolBar
 
             if (!string.IsNullOrWhiteSpace(dataPath) && Directory.Exists(dataPath))
             {
-                BuildCommonMethod.GetSaveDataObject();
-                File.Move(BuildCommonMethod.SaveFilePath, dataPath + "/AutoBuildDataObject.asset");
+                //BuildCommonMethod.GetSaveDataObject();
+                File.Copy(BuildCommonMethod.SaveFilePath, dataPath + "/AutoBuildDataObject.asset",true);
                 AssetDatabase.SaveAssets();
 
                 System.Diagnostics.Process.Start(dataPath);
@@ -76,10 +76,11 @@ public class BuildToolBar
 
             if (!string.IsNullOrWhiteSpace(dataPath) && File.Exists(dataPath))
             {
-                Debug.Log("StartLoad");
-                 BuildCommonMethod.LoadDataObject(dataPath);
+                BuildCommonMethod.SetInfoToEditor(BuildCommonMethod.LoadDataObject(dataPath));
             }
         }
+
+
     }
 
 }

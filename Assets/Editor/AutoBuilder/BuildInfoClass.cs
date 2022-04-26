@@ -20,6 +20,8 @@ public class BuildInfoClass
     [SerializeField]
     public BuildEventClass BuildEvent;
 
+    public List<SceneAsset> SceneSetting;
+
     // other Setting
     public string CompanyName;
     public string ProductName;
@@ -40,21 +42,27 @@ public class BuildInfoClass
         try
         { 
         AppName = Application.productName;
-        BuildPath = Application.dataPath.Replace("/Assets","");
-        AppVersion = PlayerSettings.bundleVersion;
-        VersionCode = PlayerSettings.Android.bundleVersionCode;
-        TargetType = BuildType.Product;
-        TargetPlatform = BuildPlatform.Android;
-        BuildEvent = new BuildEventClass();
-        CompanyName = PlayerSettings.companyName;
-        ProductName = PlayerSettings.productName;
-        minSdkVersion = PlayerSettings.Android.minSdkVersion;
-        targetSdkVersion = PlayerSettings.Android.targetSdkVersion;
-        UseKeyStore = false;
-        KeyStorePath = "";
-        KeyStorePassWord = "";
-        UseSchema = false;
-        SchemaName = "";
+            BuildPath = Application.dataPath.Replace("/Assets", "");
+            AppVersion = PlayerSettings.bundleVersion;
+            VersionCode = PlayerSettings.Android.bundleVersionCode;
+            TargetType = BuildType.Product;
+            TargetPlatform = BuildPlatform.Android;
+            BuildEvent = new BuildEventClass();
+            SceneSetting = new List<SceneAsset>();
+            foreach (var scene in EditorBuildSettings.scenes)
+            {
+                if (scene.enabled)
+                    SceneSetting.Add(AssetDatabase.LoadAssetAtPath<SceneAsset>(scene.path));
+            }
+            CompanyName = PlayerSettings.companyName;
+            ProductName = PlayerSettings.productName;
+            minSdkVersion = PlayerSettings.Android.minSdkVersion;
+            targetSdkVersion = PlayerSettings.Android.targetSdkVersion;
+            UseKeyStore = false;
+            KeyStorePath = "";
+            KeyStorePassWord = "";
+            UseSchema = false;
+            SchemaName = "";
         }
         catch
         {

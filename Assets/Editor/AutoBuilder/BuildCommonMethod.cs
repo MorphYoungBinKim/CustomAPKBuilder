@@ -67,12 +67,12 @@ public static class BuildCommonMethod
         
         if (obj != null)
         {
-            Debug.Log("Load");
             AutoBuilderWindow.Buildinfo = SetBuildInfo(obj.buildInfoClass);
             AutoBuilderWindow.GetInstance.IsDatainit = false;
             AutoBuilderWindow.GetInstance.Repaint();
         }
         EditorUtility.ClearProgressBar();
+        
         return obj;
     }
 
@@ -112,6 +112,12 @@ public static class BuildCommonMethod
         }
         //EditorUtility.CopySerialized(origin.BuildEvent.OnBeforeBuild, value.BuildEvent);
         //origin.BuildEvent = value.BuildEvent;
+        List<SceneAsset> asset = new List<SceneAsset>();
+        foreach (var scene in value.SceneSetting)
+        {
+            asset.Add(scene);
+        }
+        origin.SceneSetting = asset;
         origin.VersionCode = value.VersionCode;
         origin.TargetPlatform = value.TargetPlatform;
         origin.TargetType = value.TargetType;
@@ -218,5 +224,15 @@ public static class BuildCommonMethod
         var fields = type.BaseType.GetAllFields(flags);
         fields.AddRange(type.GetFields(flags | BindingFlags.DeclaredOnly));
         return fields;
+    }
+
+    public static void SetInfoToEditor(SaveScriptableObject info)
+    {
+        PlayerSettings.bundleVersion = info.buildInfoClass.AppVersion;
+        PlayerSettings.Android.bundleVersionCode = info.buildInfoClass.VersionCode;
+        PlayerSettings.productName = info.buildInfoClass.ProductName;
+        PlayerSettings.companyName = info.buildInfoClass.CompanyName;
+        PlayerSettings.Android.minSdkVersion = info.buildInfoClass.minSdkVersion;
+        PlayerSettings.Android.targetSdkVersion = info.buildInfoClass.targetSdkVersion;
     }
 }

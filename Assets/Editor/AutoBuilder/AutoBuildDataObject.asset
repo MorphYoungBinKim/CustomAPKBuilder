@@ -13,14 +13,23 @@ MonoBehaviour:
   m_Name: AutoBuildDataObject
   m_EditorClassIdentifier: 
   buildInfoClass:
-    AppName: CustomAPKBuilder3333
+    AppName: CustomAPKBuilder333
     BuildPath: C:/Users/Bin/Documents/CustomAPKBuilder
-    AppVersion: 0.1.1
-    VersionCode: 1
-    TargetType: 1
+    AppVersion: 0.1.111
+    VersionCode: 22211
+    TargetType: 2
     TargetPlatform: 0
     BuildEvent:
       OnBeforeBuild:
+        m_PersistentCalls:
+          m_Calls: []
+      OnAfterBuild:
+        m_PersistentCalls:
+          m_Calls: []
+      OnBeforeProductBuild:
+        m_PersistentCalls:
+          m_Calls: []
+      OnAfterProductBuild:
         m_PersistentCalls:
           m_Calls:
           - m_Target: {fileID: 11500000, guid: a79d46d48dc0c7641bf5726fd42924b6, type: 3}
@@ -32,28 +41,23 @@ MonoBehaviour:
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
               m_IntArgument: 0
               m_FloatArgument: 0
-              m_StringArgument: tttttt3
+              m_StringArgument: hhjhh
               m_BoolArgument: 0
             m_CallState: 2
-      OnAfterBuild:
-        m_PersistentCalls:
-          m_Calls: []
-      OnBeforeProductBuild:
-        m_PersistentCalls:
-          m_Calls: []
-      OnAfterProductBuild:
-        m_PersistentCalls:
-          m_Calls: []
       OnBeforeStageBuild:
         m_PersistentCalls:
           m_Calls: []
       OnAfterStageBuild:
         m_PersistentCalls:
           m_Calls: []
-    CompanyName: DefaultCompany
-    ProductName: CustomAPKBuilder
-    minSdkVersion: 25
-    targetSdkVersion: 27
+    SceneSetting:
+    - {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
+    - {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
+    - {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
+    CompanyName: DefaultCompany222
+    ProductName: CustomAPKBuilder333
+    minSdkVersion: 30
+    targetSdkVersion: 30
     UseKeyStore: 0
     KeyStorePath: 
     KeyStorePassWord: 

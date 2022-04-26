@@ -24,20 +24,13 @@ public class BuildPropertyRect : EditorWindow
 
     public void Init()
     {
-        SceneSetting = new List<SceneAsset>();
-        foreach (var scene in EditorBuildSettings.scenes)
-        {
-            if (scene.enabled)
-                SceneSetting.Add(AssetDatabase.LoadAssetAtPath<SceneAsset>(scene.path));
-        }
-
+        SceneSetting = AutoBuilderWindow.Buildinfo.SceneSetting;
         OnBeforeBuild = AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeBuild;
         OnAfterBuild = AutoBuilderWindow.Buildinfo.BuildEvent.OnAfterBuild;
         OnBeforeProductBuild = AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeProductBuild;
         OnAfterProductBuild = AutoBuilderWindow.Buildinfo.BuildEvent.OnAfterProductBuild;
         OnBeforeStageBuild = AutoBuilderWindow.Buildinfo.BuildEvent.OnBeforeStageBuild;
         OnAfterStageBuild = AutoBuilderWindow.Buildinfo.BuildEvent.OnAfterStageBuild;
-
         serializedObject = new SerializedObject(this);
     }
 
@@ -262,6 +255,8 @@ public class BuildPropertyRect : EditorWindow
 
             if(GUI.changed)
             {
+                PlayerSettings.productName = AutoBuilderWindow.Buildinfo.ProductName;
+                PlayerSettings.companyName = AutoBuilderWindow.Buildinfo.CompanyName;
                 PlayerSettings.Android.minSdkVersion = AutoBuilderWindow.Buildinfo.minSdkVersion;
                 PlayerSettings.Android.targetSdkVersion = AutoBuilderWindow.Buildinfo.targetSdkVersion;
             }
