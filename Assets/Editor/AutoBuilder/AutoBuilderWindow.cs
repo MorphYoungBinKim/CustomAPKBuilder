@@ -59,6 +59,7 @@ public class AutoBuilderWindow : EditorWindow
         return buildinfo;
     }
 
+    /*
     [MenuItem("Build/ResetData", false, 300)]
     public static void TestData()
     {
@@ -67,7 +68,7 @@ public class AutoBuilderWindow : EditorWindow
             instance = null;
             Buildinfo = null;
         }
-    }
+    }*/
 
     public bool IsDatainit = false; 
     private BuildToolBar toolBar;

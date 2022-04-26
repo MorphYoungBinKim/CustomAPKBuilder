@@ -26,7 +26,6 @@ public class BuildToolBar
             Save();
             Load();
             Export();
-            //Delete();
             GUILayout.Space(30);
             GUILayout.Space(30);
             GUILayout.FlexibleSpace();
@@ -78,7 +77,7 @@ public class BuildToolBar
             if (!string.IsNullOrWhiteSpace(dataPath) && File.Exists(dataPath))
             {
                 Debug.Log("StartLoad");
-                BuildCommonMethod.LoadDataObject(dataPath);
+                 BuildCommonMethod.LoadDataObject(dataPath);
             }
         }
     }

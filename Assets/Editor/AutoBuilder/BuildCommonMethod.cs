@@ -47,25 +47,22 @@ public static class BuildCommonMethod
         SaveScriptableObject asset = ScriptableObject.CreateInstance<SaveScriptableObject>();
         asset.buildInfoClass = SetBuildInfo(AutoBuilderWindow.Buildinfo);
         AssetDatabase.CreateAsset(asset, "Assets/Editor/AutoBuilder/AutoBuildDataObject.asset");
-        //File.Move("Assets/AutoBuildDataObject.asset", saveFilePath);
 
-//        if()
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+        AutoBuilderWindow.GetInstance.Repaint();
 
         return saveObject;
     }
 
     public static SaveScriptableObject LoadDataObject(string path)
     {
-        var saveObject = GetSaveDataObject();
-        if (saveObject != null)
-        {
-            File.Delete(saveFilePath);
-        }
-        Debug.Log(path);
-        File.Copy(path, saveFilePath);
-
+        EditorUtility.DisplayProgressBar("Load", "Data", 1 / 3);
+   
+        File.Copy(path, saveFilePath,true);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        EditorUtility.DisplayProgressBar("Load", "Data", 2 / 3);
         SaveScriptableObject obj = (SaveScriptableObject)AssetDatabase.LoadAssetAtPath("Assets/Editor/AutoBuilder/AutoBuildDataObject.asset", typeof(SaveScriptableObject));
         
         if (obj != null)
@@ -75,7 +72,7 @@ public static class BuildCommonMethod
             AutoBuilderWindow.GetInstance.IsDatainit = false;
             AutoBuilderWindow.GetInstance.Repaint();
         }
-
+        EditorUtility.ClearProgressBar();
         return obj;
     }
 

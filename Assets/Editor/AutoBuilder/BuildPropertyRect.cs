@@ -263,7 +263,7 @@ public class BuildPropertyRect : EditorWindow
             if(GUI.changed)
             {
                 PlayerSettings.Android.minSdkVersion = AutoBuilderWindow.Buildinfo.minSdkVersion;
-                PlayerSettings.Android.targetSdkVersion = PlayerSettings.Android.targetSdkVersion;
+                PlayerSettings.Android.targetSdkVersion = AutoBuilderWindow.Buildinfo.targetSdkVersion;
             }
         }
         GUILayout.BeginHorizontal();
